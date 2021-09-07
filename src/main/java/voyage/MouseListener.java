@@ -1,7 +1,5 @@
 package voyage;
 
-import org.lwjgl.glfw.GLFW;
-
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
@@ -9,7 +7,7 @@ public class MouseListener {
     private static MouseListener instance;
     private double scrollX, scrollY;
     private double xPos, yPos, lastY, lastX;
-    private boolean mouseButtonPressed[] = new boolean[3];
+    private final boolean[] mouseButtonPressed = new boolean[3];
     private boolean isDragging;
 
     private MouseListener() {
@@ -29,11 +27,11 @@ public class MouseListener {
         return MouseListener.instance;
     }
 
-    public static void mousePosCallback(long window, double xpos, double ypos) {
+    public static void mousePosCallback(long window, double xPos, double yPos) {
         get().lastX = get().xPos;
         get().lastY = get().yPos;
-        get().xPos = xpos;
-        get().yPos = ypos;
+        get().xPos = xPos;
+        get().yPos = yPos;
         get().isDragging = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
     }
 
