@@ -4,17 +4,23 @@ import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
+import java.util.Objects;
+
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
-    private int width, height;
-    private String title;
+    private final int width;
+    private final int height;
+    private final String title;
     private long glfwWindow;
 
-    private float r, g, b, a;
+    private float r;
+    private float g;
+    private float b;
+    private final float a;
     private boolean  fadeToBlack = false;
 
     private static Window window = null;
@@ -50,7 +56,7 @@ public class Window {
 
         // Terminate GLFW and free the error callback
         glfwTerminate();
-        glfwSetErrorCallback(null).free();
+        Objects.requireNonNull(glfwSetErrorCallback(null)).free();
     }
 
     public void init(){
