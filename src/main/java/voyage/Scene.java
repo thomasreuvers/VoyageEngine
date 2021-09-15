@@ -6,5 +6,9 @@ package voyage;
 
      }
 
+     public void init() {
+
+     }
+
      public abstract void update(float dt);
 }
