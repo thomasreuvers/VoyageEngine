@@ -5,8 +5,6 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import util.Time;
 
-import java.util.Objects;
-
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -72,7 +70,7 @@ public class Window {
 
         // Terminate GLFW and free the error callback
         glfwTerminate();
-        Objects.requireNonNull(glfwSetErrorCallback(null)).free();
+        glfwSetErrorCallback(null).free();
     }
 
     public void init(){
