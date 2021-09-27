@@ -11,13 +11,12 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
-    private final int width;
-    private final int height;
-    private final String title;
+    private int width, height;
+    private String title;
     private long glfwWindow;
 
     public float r, g, b, a;
-    private boolean  fadeToBlack = false;
+    private boolean fadeToBlack = false;
 
     private static Window window = null;
 
@@ -27,10 +26,9 @@ public class Window {
         this.width = 1920;
         this.height = 1080;
         this.title = "Mario";
-
-        r = 1;
-        g = 1;
-        b = 1;
+        r = 0;
+        b = 0;
+        g = 0;
         a = 1;
     }
 
@@ -53,11 +51,15 @@ public class Window {
     }
 
     public static Window get() {
-        if(Window.window == null) {
+        if (Window.window == null) {
             Window.window = new Window();
         }
 
         return Window.window;
+    }
+
+    public static Scene getScene() {
+        return get().currentScene;
     }
 
     public void run() {
@@ -70,17 +72,17 @@ public class Window {
         glfwFreeCallbacks(glfwWindow);
         glfwDestroyWindow(glfwWindow);
 
-        // Terminate GLFW and free the error callback
+        // Terminate GLFW and the free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();
     }
 
-    public void init(){
+    public void init() {
         // Setup an error callback
         GLFWErrorCallback.createPrint(System.err).set();
 
         // Initialize GLFW
-        if(!glfwInit()) {
+        if (!glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW.");
         }
 
@@ -96,29 +98,24 @@ public class Window {
             throw new IllegalStateException("Failed to create the GLFW window.");
         }
 
-        // Set cursor callbacks
         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallback);
         glfwSetMouseButtonCallback(glfwWindow, MouseListener::mouseButtonCallback);
         glfwSetScrollCallback(glfwWindow, MouseListener::mouseScrollCallback);
-
-        // Set key callback
         glfwSetKeyCallback(glfwWindow, KeyListener::keyCallback);
 
         // Make the OpenGL context current
         glfwMakeContextCurrent(glfwWindow);
-
         // Enable v-sync
         glfwSwapInterval(1);
 
         // Make the window visible
         glfwShowWindow(glfwWindow);
 
-        /* This line is critical fow LWJGL's interoperation with GLFW's
-         * OpenGL context, or any context that is managed externally.
-         * LWJGL detects the context that is current in the current thread,
-         * creates the GLCapabilities instance and makes the OpenGL
-         * bindings available for use.
-         */
+        // This line is critical for LWJGL's interoperation with GLFW's
+        // OpenGL context, or any context that is managed externally.
+        // LWJGL detects the context that is current in the current thread,
+        // creates the GLCapabilities instance and makes the OpenGL
+        // bindings available for use.
         GL.createCapabilities();
 
         Window.changeScene(0);
@@ -129,14 +126,14 @@ public class Window {
         float endTime;
         float dt = -1.0f;
 
-        while(!glfwWindowShouldClose(glfwWindow)) {
+        while (!glfwWindowShouldClose(glfwWindow)) {
             // Poll events
             glfwPollEvents();
 
             glClearColor(r, g, b, a);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            if(dt >= 0) {
+            if (dt >= 0) {
                 currentScene.update(dt);
             }
 
