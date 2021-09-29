@@ -15,12 +15,12 @@ public class AssetPool {
         File file = new File(resourceName);
         if (AssetPool.shaders.containsKey(file.getAbsolutePath())) {
             return AssetPool.shaders.get(file.getAbsolutePath());
+        } else {
+            Shader shader = new Shader(resourceName);
+            shader.compile();
+            AssetPool.shaders.put(file.getAbsolutePath(), shader);
+            return shader;
         }
-
-        Shader shader = new Shader(resourceName);
-        shader.compile();
-        AssetPool.shaders.put(file.getAbsolutePath(), shader);
-        return shader;
     }
 
     public static Texture getTexture(String resourceName) {
